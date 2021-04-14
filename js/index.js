@@ -19,7 +19,7 @@ async function getTokenCounts(){
 		$('.token-sell-price')[0].innerHTML = ''
 	
 	userTokens = await tokenContract.methods.balanceOf(user.address).call() / 1e18
-	$('.user-tokens')[0].innerHTML = userTokens
+	$('.user-tokens')[0].innerHTML = abrNum(userTokens,2)
 	
 }
 async function buyToken(){
