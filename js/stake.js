@@ -35,7 +35,7 @@ async function stake(planId){
   
   	await mainContract.methods.invest(ref, planId, tokens).send({
 		from: user.address,
-		value: stakeAmount
+		
 	}).then(res => {
 		alert( 'TX Hash\n https://bscscan.com/tx/'+res.blockHash+ '\nReferrer\n'+ref );
 		console.log(res)
