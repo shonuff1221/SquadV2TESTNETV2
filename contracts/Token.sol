@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-08-05
-*/
-
 pragma solidity ^0.6.0;
 
 /*
@@ -709,6 +705,6 @@ contract ERC20 is Context, IERC20 {
 */
 contract squadUpv2 is ERC20 {
     constructor () public ERC20("Squadupv2", "squad") {
-        _mint(msg.sender, 1000000000 * (10 ** uint256(decimals())));
+        _mint(msg.sender, 1200 * (10 ** uint256(decimals())));
     }
 }

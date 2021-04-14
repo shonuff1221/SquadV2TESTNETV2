@@ -1,38 +1,5 @@
-/**
- *Submitted for verification at BscScan.com on 2021-03-26
-*/
 
-// SPDX-License-Identifier: MIT 
- 
- /*   SQUAD_UP - investment platform based on Binance Smart Chain blockchain smart-contract technology. Safe and legit!
- *   
- *   [USAGE INSTRUCTION]
- *
- *   1) Connect browser extension Metamask (see help: https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain )
- *   2) Choose one of the tariff plans, enter the BNB amount (0.05 BNB minimum) using our website "Stake BNB" button
- *   3) Wait for your earnings
- *   4) Withdraw earnings any time using our website "Withdraw" button
- *
- *   [INVESTMENT CONDITIONS]
- *
- *   - Basic interest rate: +0.5% every 24 hours (~0.02% hourly) - only for new deposits
- *   - Minimal deposit: 0.05 BNB, no maximal limit
- *   - Total income: based on your tarrif plan (from 5% to 8% daily!!!) + Basic interest rate !!!
- *   - Earnings every moment, withdraw any time 
- *
- *   [AFFILIATE PROGRAM]
- *
- *   - 3-level referral commission: 5% - 2.5% - 0.5%
- *
- *   [FUNDS DISTRIBUTION]
- *
- *   - 82% Platform main balance, participants payouts
- *   - 8% Advertising and promotion expenses
- *   - 8% Affiliate program bonuses
- *   - 2% Support work, technical functioning, administration fee
- */
-
-pragma solidity 0.5.10;
+pragma solidity ^0.6.0;
 import "./IERC20.sol";
 contract SQUAD_UP {
 	using SafeMath for uint256;
@@ -40,7 +7,7 @@ contract SQUAD_UP {
 	uint256 constant public INVEST_MIN_AMOUNT = 1 ether;
 	uint256[] public REFERRAL_PERCENTS = [50, 25, 5];
 	uint256 constant public PROJECT_FEE = 100;
-	uint256 constant public PERCENT_STEP = 5;
+	uint256 constant public PERCENT_STEP = 2;
 	uint256 constant public PERCENTS_DIVIDER = 1000;
 	uint256 constant public TIME_STEP =1 days;
     SquadUPV2 public token;

@@ -1,5 +1,5 @@
 pragma solidity ^0.6.0;
-import "./Token.sol";
+import "./Squad.sol";
 contract Owned {
     modifier onlyOwner() {
         require(msg.sender==owner,"you are not a owner");
@@ -13,7 +13,7 @@ contract Owned {
     }
     
 }
-contract tronToMoonExchange is squadUpv2,Owned{
+contract SquadUpExchange is squadUpv2,Owned{
      constructor()public{
      startTime=now;
      owner=msg.sender;
@@ -72,7 +72,7 @@ contract tronToMoonExchange is squadUpv2,Owned{
     uint256 public totalTokenMinted;
     uint256 public totalTokenSold;
     using SafeMath for uint256;
-    uint256 initialPrice=0.02 ether;
+    uint256 initialPrice=0.005 ether;
     function buyPriceCalculation() public view returns(uint){
         require(startTime != 0,"contract isn't deployed yet!");
         uint256 increment= ((now - startTime)/(10 hours))*10e13;
