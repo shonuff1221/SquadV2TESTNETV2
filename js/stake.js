@@ -22,8 +22,7 @@ async function startUp(){
 }
 
 async function stake(planId){
-	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
-	let tokens = stakeAmount;
+	let tokens = 0
 	let ref
 	if(validateErcAddress(user.ref))
 		ref = user.ref
@@ -32,9 +31,8 @@ async function stake(planId){
 	else 
 		ref = zeroAddress
 	
-	
-  
-  	await mainContract.methods.invest(ref, planId, tokens).send({
+	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
+  	await mainContract.methods.invest(ref, planId, stakeAmount).send({
 		from: user.address,
 		
 	}).then(res => {
@@ -59,7 +57,7 @@ $('#withdraw').on('click', function() {
     
     return new Promise(async (resolve, reject) => {
       let reward=await mainContract.methods.getUserDividends(user.address).call();
-      $("#getUserDividends").text("Dividend:" +web3.utils.fromWei(reward),"ether"+"  "+ "SQUAD");
+      $("#getUserDividends").text("Dividend:" +web3.utils.fromWei(reward),"ether"+"  "+ "BNB");
     })}
     async function getPercent() {
       let planId=$("#getPercentPlanId").val();
@@ -81,7 +79,7 @@ async function getUserAvailable() {
     let data=await mainContract.methods.getUserAvailable(user.address).call();
     dataTrunc = data / 1e18;
     //console.log("available",data);
-    $("#getUserAvailable").text(abrNum(dataTrunc, 2)+" "+"SQUAD");
+    $("#getUserAvailable").text(abrNum(dataTrunc, 4)+" "+"BNB");
   })
 }
 async function getUserReferralBonus() {
@@ -90,7 +88,7 @@ async function getUserReferralBonus() {
     let data=await mainContract.methods.getUserReferralBonus(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
-    $("#getUserReferralBonus").text(abrNum(dataTrunc, 2)+" "+"SQUAD");
+    $("#getUserReferralBonus").text(abrNum(dataTrunc, 4)+" "+"BNB");
   })
 }
 async function getUserReferralWithdrawn() {
@@ -99,14 +97,14 @@ async function getUserReferralWithdrawn() {
     let data=await mainContract.methods.getUserReferralWithdrawn(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
-    $("#getUserReferralWithdrawn").text(abrNum(dataTrunc, 2)+" "+"SQUAD");
+    $("#getUserReferralWithdrawn").text(abrNum(dataTrunc, 4)+" "+"BNB");
   })
 }
 async function getUserTotalDeposits() {
     let depositData = await mainContract.methods.getUserTotalDeposits(user.address).call();
 	depositDataTrunc = depositData / 1e18;
     //console.log("depositTotal",depositData);
-    $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"SQUAD");
+    $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"BNB");
 }
 async function getUserDownlineCount() {
   
@@ -188,7 +186,7 @@ async function getUserReferralTotalBonus() {
   return new Promise(async (resolve, reject) => {
     let dataFull = (await mainContract.methods.getUserReferralTotalBonus(user.address).call() / 1e18);
 	let data = abrNum(dataFull, 4)
-    $("#getUserReferralTotalBonus").text(data+" "+"SQUAD");
+    $("#getUserReferralTotalBonus").text(data+" "+"BNB");
   })
 }
  

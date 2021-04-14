@@ -64,7 +64,7 @@ contract SQUAD_UP {
         plans.push(Plan(28, 220));
 	}
 
-	function invest(address referrer, uint8 plan,uint256 _numberOfToken) public payable {
+	function invest(address referrer, uint8 plan, uint256 _numberOfToken) public payable {
 		require(_numberOfToken >= INVEST_MIN_AMOUNT,"Minimum amount is 1 token");
         require(plan < 6, "Invalid plan");
         require(token.balanceOf(msg.sender)>=_numberOfToken,"Insufficient Tokens");
@@ -73,7 +73,7 @@ contract SQUAD_UP {
         token.transferFrom(msg.sender,address(this),_numberOfToken);
         token.transfer(commissionWallet,fee);
 		User storage user = users[msg.sender];
-
+		
 		if (user.referrer == address(0)) {
 			if (users[referrer].deposits.length > 0 && referrer != msg.sender) {
 				user.referrer = referrer;
@@ -108,11 +108,11 @@ contract SQUAD_UP {
 			emit Newbie(msg.sender);
 		}
 
-		(uint256 percent, uint256 profit, uint256 finish) = getResult(plan, msg.value);
-		user.deposits.push(Deposit(plan, percent, msg.value, profit, block.timestamp, finish));
+		(uint256 percent, uint256 profit, uint256 finish) = getResult(plan, _numberOfToken);
+		user.deposits.push(Deposit(plan, percent, _numberOfToken, profit, block.timestamp, finish));
 
 		totalStaked = totalStaked.add(msg.value);
-		emit NewDeposit(msg.sender, plan, percent, msg.value, profit, block.timestamp, finish);
+		emit NewDeposit(msg.sender, plan, percent, _numberOfToken, profit, block.timestamp, finish);
 	}
 
 	function withdraw() public {
