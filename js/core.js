@@ -9,10 +9,10 @@ let accounts;
 const thisURL = window.location.origin.toString();
 
 let Accounttype = "0";
-const tokenAddress = "0x626A8718729b64AfFFdedC50b7f3f69bDcF6854c";
+const tokenAddress = "0xDEea7B76f540b3A4B581697a9142E4802f8f5FdD";
 let tokenContract = undefined
 
-const mainContractAddress = "0x163f3111B9F060218F036dB159cb72AE1589da94";
+const mainContractAddress = "0x1d22E9559b948c88af74d0687ad07971F3452b54";
 let mainContract = undefined
 
 const zeroAddress = '0x70DAcfC172eeC57553de491E92d9806e28ff69F2'
