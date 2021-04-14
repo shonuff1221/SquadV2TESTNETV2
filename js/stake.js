@@ -22,7 +22,8 @@ async function startUp(){
 }
 
 async function stake(planId){
-	let tokens = 0
+	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
+	let tokens = stakeAmount;
 	let ref
 	if(validateErcAddress(user.ref))
 		ref = user.ref
@@ -31,7 +32,7 @@ async function stake(planId){
 	else 
 		ref = zeroAddress
 	
-	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
+	
   
   	await mainContract.methods.invest(ref, planId, tokens).send({
 		from: user.address,
