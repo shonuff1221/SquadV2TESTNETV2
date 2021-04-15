@@ -208,7 +208,7 @@ function clearSelection() {
     }
 }
 async function contractBalances(){
-	let contractBalanceFull = (await mainContract.methods.getContractBalance().call() / 1e18)
+	let contractBalanceFull = (await tokenContract.methods.marketCap().call() / 1e18)
 	let contractBalance = abrNum(contractBalanceFull, 4)
 	$('#balanceContract').text(contractBalance)
 	let totalStakedFull = (await mainContract.methods.totalStaked().call() / 1e18)
