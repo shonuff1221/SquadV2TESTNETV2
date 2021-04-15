@@ -13,10 +13,10 @@ async function getTokenCounts(){
 	tokenSellPrice = await tokenContract.methods.sellPrice(toHexString(tokenBuyPrice)).call()
 	
 	$('.token-buy-price')[0].innerHTML = "1 BNB : " + abrNum(tokenBuyPrice/1e18, 4) +" SqdUp Tokens"
-	if(circulatingTokens > 0)
-		$('.token-sell-price')[0].innerHTML = abrNum(tokenSellPrice/1e18, 4) +" SqdUp Tokens : 1 BNB"
-	else
-		$('.token-sell-price')[0].innerHTML = ''
+	// if(circulatingTokens > 0)
+	// 	$('.token-sell-price')[0].innerHTML = abrNum(tokenSellPrice/1e18, 4) +" SqdUp Tokens : 1 BNB"
+	// else
+	// 	$('.token-sell-price')[0].innerHTML = ''
 	
 	userTokens = await tokenContract.methods.balanceOf(user.address).call() / 1e18
 	$('.user-tokens')[0].innerHTML = abrNum(userTokens,2)

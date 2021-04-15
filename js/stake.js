@@ -57,7 +57,7 @@ $('#withdraw').on('click', function() {
     
     return new Promise(async (resolve, reject) => {
       let reward=await mainContract.methods.getUserDividends(user.address).call();
-      $("#getUserDividends").text("Dividend:" +web3.utils.fromWei(reward),"ether"+"  "+ "BNB");
+      $("#getUserDividends").text("Dividend:" +web3.utils.fromWei(reward),"ether"+"  "+ "SQUAD");
     })}
     async function getPercent() {
       let planId=$("#getPercentPlanId").val();
@@ -79,7 +79,7 @@ async function getUserAvailable() {
     let data=await mainContract.methods.getUserAvailable(user.address).call();
     dataTrunc = data / 1e18;
     //console.log("available",data);
-    $("#getUserAvailable").text(abrNum(dataTrunc, 4)+" "+"BNB");
+    $("#getUserAvailable").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
   })
 }
 async function getUserReferralBonus() {
@@ -88,7 +88,7 @@ async function getUserReferralBonus() {
     let data=await mainContract.methods.getUserReferralBonus(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
-    $("#getUserReferralBonus").text(abrNum(dataTrunc, 4)+" "+"BNB");
+    $("#getUserReferralBonus").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
   })
 }
 async function getUserReferralWithdrawn() {
@@ -97,14 +97,14 @@ async function getUserReferralWithdrawn() {
     let data=await mainContract.methods.getUserReferralWithdrawn(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
-    $("#getUserReferralWithdrawn").text(abrNum(dataTrunc, 4)+" "+"BNB");
+    $("#getUserReferralWithdrawn").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
   })
 }
 async function getUserTotalDeposits() {
     let depositData = await mainContract.methods.getUserTotalDeposits(user.address).call();
 	depositDataTrunc = depositData / 1e18;
     //console.log("depositTotal",depositData);
-    $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"BNB");
+    $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"SQUAD");
 }
 async function getUserDownlineCount() {
   
@@ -186,7 +186,7 @@ async function getUserReferralTotalBonus() {
   return new Promise(async (resolve, reject) => {
     let dataFull = (await mainContract.methods.getUserReferralTotalBonus(user.address).call() / 1e18);
 	let data = abrNum(dataFull, 4)
-    $("#getUserReferralTotalBonus").text(data+" "+"BNB");
+    $("#getUserReferralTotalBonus").text(data+" "+"SQUAD");
   })
 }
  
