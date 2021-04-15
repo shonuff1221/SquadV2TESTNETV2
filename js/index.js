@@ -1,6 +1,9 @@
 function runDash(){
 	getTokenCounts()
 	getRefCount()
+	setTimeout(() => {
+		runDash()
+	}, 10000)
 }
 
 async function getTokenCounts(){
@@ -37,6 +40,10 @@ async function buyToken(){
 		from: user.address,
 		value: amount,
 		gasLimit:210000
+	}).then(res => {
+		getTokenCounts()
+		alert("Bought " + res.events.Transfer.returnValues.value/1e18 +' tokens\n for '+amount/1e18+ ' BNB')
+		console.log(res)
 	})
 }
 async function getBuyOutput(){
@@ -44,17 +51,22 @@ async function getBuyOutput(){
 	let tokens = abrNum(await tokenContract.methods.buyPrice(toHexString(amount* 1e18)).call() / 1e18, 2)
 	$('.buy-button-text')[0].innerHTML = 'Buy ' + tokens + ' Tokens<br> for '+ amount +' BNB'
 }
+let bnbPurchased
 async function getSellOutput(){
 	let amount = $('.sell-token-input')[0].value
-	let bnb = abrNum(await tokenContract.methods.sellPrice(toHexString(amount* 1e18)).call() / 1e18, 2)
-	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ bnb +' BNB'
+	bnbPurchased = abrNum((await tokenContract.methods.sellPrice(toHexString(amount* 1e18)).call() / 1e18) * .9, 2)
+	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ bnbPurchased +' BNB'
 }
 async function sellToken(){
+	let bnb = bnbPurchased
 	let amount = toHexString( $('.sell-token-input')[0].value * 1e18 )
 	await tokenContract.methods.sellToken(amount).send({
 		from: user.address,
 		gasLimit:210000
-
+	}).then(res => {
+		getTokenCounts()
+		alert("Sold: " + res.events.Transfer.returnValues.value/1e18 +' tokens for '+bnb+ ' BNB')
+		console.log(res)
 	})
 }
 async function getRefCount(){

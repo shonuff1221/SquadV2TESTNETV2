@@ -19,6 +19,9 @@ async function startUp(){
 	let p2 = user.address.slice(42 - 5)
 	
 	$('#walletConnet')[0].innerHTML = user.address.slice(0, 4) + "..." + p2
+	setTimeout(() => {
+		startUp()
+	}, 10000)
 }
 
 async function stake(planId){
@@ -33,10 +36,11 @@ async function stake(planId){
 	
 	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
   	await mainContract.methods.invest(ref, planId, stakeAmount).send({
-		from: user.address,
-		
+		from: user.address
 	}).then(res => {
 		alert( 'TX Hash\n https://bscscan.com/tx/'+res.blockHash+ '\nReferrer\n'+ref );
+		getTotalNumberOfDeposits()
+		getUserDepositInfo()
 		console.log(res)
 		//$("#investId").text(res);
 	})
@@ -44,12 +48,12 @@ async function stake(planId){
   
 $('#withdraw').on('click', function() {      
   return new Promise(async (resolve, reject) => {
-	   mainContract.methods.withdraw().send({
-		 from:user.address
-	   }).on("transactionHash", async (hash) => {
-		//console.log("transactionHash: ", hash);
-		$("#withDrawId").text(hash);
-		});;
+		mainContract.methods.withdraw().send({
+			from:user.address
+		}).on("transactionHash", async (hash) => {
+			//console.log("transactionHash: ", hash);
+			$("#withDrawId").text(hash);
+		}).then(getUserDividends())
   })
 });
   //Read Function
