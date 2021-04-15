@@ -14,7 +14,7 @@ let tokenContract = undefined
 const mainContractAddress = "0xC7F7C73Ed11bE032c2692121eA1b8d7712Cbc9f1";
 let mainContract = undefined
 
-const zeroAddress = '0x70DAcfC172eeC57553de491E92d9806e28ff69F2'
+const zeroAddress = "0x70DAcfC172eeC57553de491E92d9806e28ff69F2"
 const bscScan = "https://bscscan.com/address/"+mainContractAddress
 
 let plan = {

@@ -28,7 +28,7 @@ async function buyToken(){
 	if(validateErcAddress(user.ref))
 		ref = user.ref
 	else if(user.ref == user.address)
-		ref = zeroAdddress
+		ref = zeroAddress
 	else 
 		ref = zeroAddress
 	
