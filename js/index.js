@@ -1,6 +1,8 @@
 function runDash(){
 	getTokenCounts()
 	getRefCount()
+	let p2 = user.address.slice(42 - 5)
+	$('#walletConnet')[0].innerHTML = user.address.slice(0, 4) + "..." + p2
 	setTimeout(() => {
 		runDash()
 	}, 10000)
@@ -15,7 +17,7 @@ async function getTokenCounts(){
 	tokenBuyPrice = await tokenContract.methods.buyPrice(toHexString(1e18)).call()
 	tokenSellPrice = await tokenContract.methods.sellPrice(toHexString(tokenBuyPrice)).call()
 	
-	$('.token-buy-price')[0].innerHTML = "1 BNB : " + abrNum(tokenBuyPrice/1e18, 4) +" SqdUp Tokens"
+	$('.token-buy-price')[0].innerHTML = "1 BNB = " + abrNum(tokenBuyPrice/1e18, 4) +" SQUAD"
 	// if(circulatingTokens > 0)
 	// 	$('.token-sell-price')[0].innerHTML = abrNum(tokenSellPrice/1e18, 4) +" SqdUp Tokens : 1 BNB"
 	// else

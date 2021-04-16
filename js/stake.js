@@ -109,6 +109,8 @@ async function getUserTotalDeposits() {
 	depositDataTrunc = depositData / 1e18;
     //console.log("depositTotal",depositData);
     $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"SQUAD");
+	userTokens = await tokenContract.methods.balanceOf(user.address).call() / 1e18;
+	$("#user-tokens").text(abrNum(userTokens,2)+" "+"SQUAD");
 }
 async function getUserDownlineCount() {
   
