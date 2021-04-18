@@ -12,10 +12,10 @@ async function getTokenCounts(){
 	totalTokens = await tokenContract.methods.totalSupply().call() / 1e18
 	$('.total-tokens')[0].innerHTML = abrNum(totalTokens, 2)
 	
-	circulatingTokens = await tokenContract.methods.circulatingSupply().call() / 1e18
+	circulatingTokens = await tokenContract.methods.totalSupply().call() / 1e18
 	
-	tokenBuyPrice = await tokenContract.methods.buyPrice(toHexString(1e18)).call()
-	tokenSellPrice = await tokenContract.methods.sellPrice(toHexString(tokenBuyPrice)).call()
+	tokenBuyPrice = await tokenContract.methods.buyPrice().call()
+	tokenSellPrice = await tokenContract.methods.sellPrice().call()
 	
 	$('.token-buy-price')[0].innerHTML = "1 BNB = " + abrNum(tokenBuyPrice/1e18, 4) +" SQUAD"
 	// if(circulatingTokens > 0)
@@ -38,7 +38,7 @@ async function buyToken(){
 		ref = zeroAddress
 	
 	let amount = toHexString( $('.buy-token-input')[0].value * 1e18 )
-	await tokenContract.methods.buyToken(amount,ref).send({
+	await tokenContract.methods.buy(ref).send({
 		from: user.address,
 		value: amount,
 		gasLimit:210000
@@ -50,19 +50,19 @@ async function buyToken(){
 }
 async function getBuyOutput(){
 	let amount = $('.buy-token-input')[0].value
-	let tokens = abrNum(await tokenContract.methods.buyPrice(toHexString(amount* 1e18)).call() / 1e18, 2)
-	$('.buy-button-text')[0].innerHTML = 'Buy ' + tokens + ' Tokens<br> for '+ amount +' BNB'
+	let tokens = abrNum( await tokenContract.methods.buyPrice().call() / 1e18, 2)
+	$('.buy-button-text')[0].innerHTML = 'Buy ' + (amount*tokens) + ' Tokens<br> for '+ amount +' BNB'
 }
 let bnbPurchased
 async function getSellOutput(){
 	let amount = $('.sell-token-input')[0].value
-	bnbPurchased = abrNum((await tokenContract.methods.sellPrice(toHexString(amount* 1e18)).call() / 1e18) * .9, 2)
-	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ bnbPurchased +' BNB'
+	bnbPurchased = abrNum( (await tokenContract.methods.sellPrice().call() / 1e18) * .9, 2)
+	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ (amount*bnbPurchased) +' BNB'
 }
 async function sellToken(){
 	let bnb = bnbPurchased
 	let amount = toHexString( $('.sell-token-input')[0].value * 1e18 )
-	await tokenContract.methods.sellToken(amount).send({
+	await tokenContract.methods.sell(amount).send({
 		from: user.address,
 		gasLimit:210000
 	}).then(res => {
