@@ -1,3 +1,4 @@
+
 pragma solidity ^0.6.0;
 
 /*
@@ -233,7 +234,7 @@ library Address {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
         // solhint-disable-next-line avoid-low-level-calls, avoid-call-value
-        (bool success, ) = recipient.call{ value: amount }("");
+       (bool success, ) = recipient.call.value(amount)("");
         require(success, "Address: unable to send value, recipient may have reverted");
     }
 
@@ -299,7 +300,7 @@ library Address {
         require(isContract(target), "Address: call to non-contract");
 
         // solhint-disable-next-line avoid-low-level-calls
-        (bool success, bytes memory returndata) = target.call{ value: weiValue }(data);
+        (bool success, bytes memory returndata) = target.call.value(weiValue)(data);
         if (success) {
             return returndata;
         } else {
@@ -703,8 +704,7 @@ contract ERC20 is Context, IERC20 {
 /*
 * Code is proprietary property of Zin Finance and must not be copied or used elsewhere.
 */
-contract squadUpv2 is ERC20 {
-    constructor () public ERC20("Squadupv2", "squad") {
-        _mint(msg.sender, 1200 * (10 ** uint256(decimals())));
+contract SquadUpV2 is ERC20 {
+    constructor () public ERC20("SquadUp", "SQD") {
     }
 }
