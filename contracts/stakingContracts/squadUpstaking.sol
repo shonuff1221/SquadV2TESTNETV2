@@ -39,6 +39,7 @@ contract SQUAD_UP {
 		uint256 bonus;
 		uint256 totalBonus;
 		uint256 lastDepositTime;
+		uint256 lastWithdrawTime;
 	}
 
 	mapping (address => User) internal users;
@@ -138,6 +139,7 @@ contract SQUAD_UP {
         uint256 totalPayouts=SafeMath.sub(totalAmount,totalFee);
 		token.transfer(msg.sender,totalPayouts);
         users[msg.sender].lastDepositTime=now;
+        users[msg.sender].lastWithdrawTime=now;
 		emit Withdrawn(msg.sender, totalAmount);
 
 	}
