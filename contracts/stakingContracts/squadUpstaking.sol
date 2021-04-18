@@ -7,9 +7,10 @@ contract SQUAD_UP {
 	uint256 constant public INVEST_MIN_AMOUNT = 1 ether;
 	uint256[] public REFERRAL_PERCENTS = [50, 25, 5];
 	uint256 constant public PROJECT_FEE = 100;
-	uint256 constant public PERCENT_STEP = 2;
+	uint256 constant public PERCENT_STEP = 3;
 	uint256 constant public PERCENTS_DIVIDER = 1000;
 	uint256 constant public TIME_STEP =1 days;
+	uint256 constant public withDrawFee=10*(10**36);
     SquadUPV2 public token;
 	uint256 public totalStaked;
 	uint256 public totalRefBonus;
@@ -37,6 +38,7 @@ contract SQUAD_UP {
 		uint256[3] levels;
 		uint256 bonus;
 		uint256 totalBonus;
+		uint256 lastDepositTime;
 	}
 
 	mapping (address => User) internal users;
@@ -64,16 +66,13 @@ contract SQUAD_UP {
         plans.push(Plan(28, 220));
 	}
 
-	function invest(address referrer, uint8 plan, uint256 _numberOfToken) public payable {
+	function invest(address referrer, uint8 plan,uint256 _numberOfToken) public payable {
 		require(_numberOfToken >= INVEST_MIN_AMOUNT,"Minimum amount is 1 token");
         require(plan < 6, "Invalid plan");
         require(token.balanceOf(msg.sender)>=_numberOfToken,"Insufficient Tokens");
-		uint256 fee = _numberOfToken.mul(PROJECT_FEE).div(PERCENTS_DIVIDER);
-		emit FeePayed(msg.sender, fee);
         token.transferFrom(msg.sender,address(this),_numberOfToken);
-        token.transfer(commissionWallet,fee);
 		User storage user = users[msg.sender];
-		
+
 		if (user.referrer == address(0)) {
 			if (users[referrer].deposits.length > 0 && referrer != msg.sender) {
 				user.referrer = referrer;
@@ -93,7 +92,7 @@ contract SQUAD_UP {
 			address upline = user.referrer;
 			for (uint256 i = 0; i < 3; i++) {
 				if (upline != address(0)) {
-					uint256 amount = msg.value.mul(REFERRAL_PERCENTS[i]).div(PERCENTS_DIVIDER);
+					uint256 amount = _numberOfToken.mul(REFERRAL_PERCENTS[i]).div(PERCENTS_DIVIDER);
 					users[upline].bonus = users[upline].bonus.add(amount);
 					users[upline].totalBonus = users[upline].totalBonus.add(amount);
 					emit RefBonus(upline, msg.sender, i, amount);
@@ -111,11 +110,12 @@ contract SQUAD_UP {
 		(uint256 percent, uint256 profit, uint256 finish) = getResult(plan, _numberOfToken);
 		user.deposits.push(Deposit(plan, percent, _numberOfToken, profit, block.timestamp, finish));
 
-		totalStaked = totalStaked.add(msg.value);
+		totalStaked = totalStaked.add(_numberOfToken);
 		emit NewDeposit(msg.sender, plan, percent, _numberOfToken, profit, block.timestamp, finish);
 	}
 
 	function withdraw() public {
+	    require(now>=users[msg.sender].lastDepositTime+1 minutes,"You can't withdraw before a day");
 		User storage user = users[msg.sender];
 
 		uint256 totalAmount = getUserDividends(msg.sender);
@@ -134,9 +134,10 @@ contract SQUAD_UP {
 		}
 
 		user.checkpoint = block.timestamp;
-
-		token.transfer(msg.sender,totalAmount);
-
+        uint256 totalFee=SafeMath.div((withDrawFee*100),totalAmount);
+        uint256 totalPayouts=SafeMath.sub(totalAmount,totalFee);
+		token.transfer(msg.sender,totalPayouts);
+        users[msg.sender].lastDepositTime=now;
 		emit Withdrawn(msg.sender, totalAmount);
 
 	}
