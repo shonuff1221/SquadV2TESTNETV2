@@ -196,7 +196,7 @@ contract squadUpv2Exchange is SquadUpV2, Percentage {
         uint256 totalFee = SafeMath.add(adminFee, refBonus);
         uint256 _taxedEthereum = SafeMath.sub(_incomingEthereum, totalFee);
         uint256 _amountOfTokens = ethereumToTokens_(_taxedEthereum);
-        return adminFee;
+        return _amountOfTokens;
     }
 
     function calculateEthereumReceived(uint256 _tokensToSell)
