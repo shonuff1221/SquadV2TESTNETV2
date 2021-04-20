@@ -1,16 +1,26 @@
 
 pragma solidity ^0.6.0;
 import "./IERC20.sol";
-contract SQUAD_UP {
+contract Percentage{
+
+    uint256 public baseValue = 100;
+
+    function onePercent(uint256 _value) internal view returns (uint256)  {
+        uint256 roundValue = SafeMath.ceil(_value, baseValue);
+        uint256 Percent = SafeMath.div(SafeMath.mul(roundValue, baseValue), 10000);
+        return  Percent;
+    }
+}
+contract SQUAD_UP is Percentage{
 	using SafeMath for uint256;
 
 	uint256 constant public INVEST_MIN_AMOUNT = 1 ether;
 	uint256[] public REFERRAL_PERCENTS = [50, 25, 5];
 	uint256 constant public PROJECT_FEE = 100;
-	uint256 constant public PERCENT_STEP = 3;
+	uint256 constant public PERCENT_STEP = 5;
 	uint256 constant public PERCENTS_DIVIDER = 1000;
 	uint256 constant public TIME_STEP =1 days;
-	uint256 constant public withDrawFee=10*(10**36);
+	uint256 constant public withDrawFee=10;
     SquadUPV2 public token;
 	uint256 public totalStaked;
 	uint256 public totalRefBonus;
@@ -67,7 +77,7 @@ contract SQUAD_UP {
         plans.push(Plan(28, 220));
 	}
 
-	function invest(address referrer, uint8 plan,uint256 _numberOfToken) public payable {
+	function invest(address referrer, uint8 plan,uint256 _numberOfToken) public {
 		require(_numberOfToken >= INVEST_MIN_AMOUNT,"Minimum amount is 1 token");
         require(plan < 6, "Invalid plan");
         require(token.balanceOf(msg.sender)>=_numberOfToken,"Insufficient Tokens");
@@ -135,11 +145,11 @@ contract SQUAD_UP {
 		}
 
 		user.checkpoint = block.timestamp;
-        uint256 totalFee=SafeMath.div((withDrawFee*100),totalAmount);
-        uint256 totalPayouts=SafeMath.sub(totalAmount,totalFee);
+		uint256 contractFee=SafeMath.mul(withDrawFee,onePercent(totalAmount));
+        uint256 totalPayouts=SafeMath.sub(totalAmount,contractFee);
 		token.transfer(msg.sender,totalPayouts);
+		users[msg.sender].lastWithdrawTime=now;
         users[msg.sender].lastDepositTime=now;
-        users[msg.sender].lastWithdrawTime=now;
 		emit Withdrawn(msg.sender, totalAmount);
 
 	}
@@ -186,6 +196,9 @@ contract SQUAD_UP {
 
 		return totalAmount;
 	}
+	function getUserWithdrawTime(address userAddress) public view returns(uint256) {
+          return users[userAddress].lastWithdrawTime;
+}
 
 	function getUserCheckpoint(address userAddress) public view returns(uint256) {
 		return users[userAddress].checkpoint;
@@ -276,4 +289,11 @@ library SafeMath {
 
         return c;
     }
+     
+    function ceil(uint256 a, uint256 m) internal pure returns (uint256) {
+        uint256 c = add(a,m);
+        uint256 d = sub(c,1);
+        return mul(div(d,m),m);
+    }
+    
 }
