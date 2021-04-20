@@ -14,7 +14,7 @@ async function startUp(){
 	getUserReferralWithdrawn()
 	getUserReferralBonus()
 	 
-	$('.contract-address')[0].innerHTML = `<a class="btn btn-sm btn-primary display-5" href="https://bscscan.com/address/`+mainContractAddress+`" target="_blank"><br>Contract Address\n` + mainContractAddress + `</a></div>`
+	$('.contract-address')[0].innerHTML = `<a class="btn btn-sm btn-primary display-5" href="https://bscscan.com/address/`+stakeContractAddress+`" target="_blank"><br>Contract Address\n` + stakeContractAddress + `</a></div>`
 
 	let p2 = user.address.slice(42 - 5)
 	
@@ -35,7 +35,7 @@ async function stake(planId){
 		ref = zeroAddress
 	
 	let stakeAmount = toHexString($('#plan'+(planId+1)+'amount')[0].value * 1e18)
-  	await mainContract.methods.invest(ref, planId, stakeAmount).send({
+  	await stakeContract.methods.invest(ref, planId, stakeAmount).send({
 		from: user.address
 	}).then(res => {
 		alert( 'TX Hash\n https://bscscan.com/tx/'+res.blockHash+ '\nReferrer\n'+ref );
@@ -48,7 +48,7 @@ async function stake(planId){
   
 $('#withdraw').on('click', function() {      
   return new Promise(async (resolve, reject) => {
-		mainContract.methods.withdraw().send({
+		stakeContract.methods.withdraw().send({
 			from:user.address
 		}).on("transactionHash", async (hash) => {
 			//console.log("transactionHash: ", hash);
@@ -60,27 +60,27 @@ $('#withdraw').on('click', function() {
   async function getUserDividends() {
     
     return new Promise(async (resolve, reject) => {
-      let reward=await mainContract.methods.getUserDividends(user.address).call();
+      let reward=await stakeContract.methods.getUserDividends(user.address).call();
       $("#getUserDividends").text("Dividend:" +web3.utils.fromWei(reward),"ether"+"  "+ "SQUAD");
     })}
     async function getPercent() {
       let planId=$("#getPercentPlanId").val();
       
       return new Promise(async (resolve, reject) => {
-        let percent=await mainContract.methods.getPercent(planId).call();
+        let percent=await stakeContract.methods.getPercent(planId).call();
         $("#percentage").text("percentage:" +percent/100+"%");
       })
 }
 
 let totalUserDeposits
 async function getTotalNumberOfDeposits() {
-    totalUserDeposits = await mainContract.methods.getUserAmountOfDeposits(user.address).call();
+    totalUserDeposits = await stakeContract.methods.getUserAmountOfDeposits(user.address).call();
     $("#TotalNumberOfDeposits").text("Total: "+totalUserDeposits);
 }
 async function getUserAvailable() {
   
   return new Promise(async (resolve, reject) => {
-    let data=await mainContract.methods.getUserAvailable(user.address).call();
+    let data=await stakeContract.methods.getUserAvailable(user.address).call();
     dataTrunc = data / 1e18;
     //console.log("available",data);
     $("#getUserAvailable").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
@@ -89,7 +89,7 @@ async function getUserAvailable() {
 async function getUserReferralBonus() {
   
   return new Promise(async (resolve, reject) => {
-    let data=await mainContract.methods.getUserReferralBonus(user.address).call();
+    let data=await stakeContract.methods.getUserReferralBonus(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
     $("#getUserReferralBonus").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
@@ -98,14 +98,14 @@ async function getUserReferralBonus() {
 async function getUserReferralWithdrawn() {
   
   return new Promise(async (resolve, reject) => {
-    let data=await mainContract.methods.getUserReferralWithdrawn(user.address).call();
+    let data=await stakeContract.methods.getUserReferralWithdrawn(user.address).call();
 	dataTrunc = data / 1e18;
     //console.log("data",data);
     $("#getUserReferralWithdrawn").text(abrNum(dataTrunc, 4)+" "+"SQUAD");
   })
 }
 async function getUserTotalDeposits() {
-    let depositData = await mainContract.methods.getUserTotalDeposits(user.address).call();
+    let depositData = await stakeContract.methods.getUserTotalDeposits(user.address).call();
 	depositDataTrunc = depositData / 1e18;
     //console.log("depositTotal",depositData);
     $("#getUserTotalDeposits").text(abrNum(depositDataTrunc, 4)+" "+"SQUAD");
@@ -115,7 +115,7 @@ async function getUserTotalDeposits() {
 async function getUserDownlineCount() {
   
   return new Promise(async (resolve, reject) => {
-    let data=await mainContract.methods.getUserDownlineCount(user.address).call();
+    let data=await stakeContract.methods.getUserDownlineCount(user.address).call();
     //console.log("Downline",data);
     downline= $('#getUserDownlineCount')[0].innerHTML = parseInt(data[0]) + parseInt(data[1]) + parseInt(data[2]);
     
@@ -139,7 +139,7 @@ async function getUserDepositInfo() {
 </tr>
 	`
 	for(let i = 0; i < totalUserDeposits; i++){
-		let data = await mainContract.methods.getUserDepositInfo(user.address, i).call();
+		let data = await stakeContract.methods.getUserDepositInfo(user.address, i).call();
 		let now = new Date().getTime();
 		let isFinished = false;
 		let start = (new Date(data[4] * 1000).getMonth()+1) +'/'+ new Date(data[4] * 1000).getDate() 
@@ -176,13 +176,13 @@ async function getUserDepositInfo() {
 async function getUserReferrer() {
   
   return new Promise(async (resolve, reject) => {
-    let data = await mainContract.methods.getUserReferrer(user.address).call();
+    let data = await stakeContract.methods.getUserReferrer(user.address).call();
     $("#getUserReferrerAddress").text("refferer:" +data);
   })
 }
 async function getUserCheckpoint() {
   return new Promise(async (resolve, reject) => {
-    let data=await mainContract.methods.getUserCheckpoint(user.address).call();
+    let data=await stakeContract.methods.getUserCheckpoint(user.address).call();
     $("#getUserCheckpointdata").text("getUserCheckpoint:" +data);
     checkpoint = data;
   })
@@ -190,7 +190,7 @@ async function getUserCheckpoint() {
 async function getUserReferralTotalBonus() {
   
   return new Promise(async (resolve, reject) => {
-    let dataFull = (await mainContract.methods.getUserReferralTotalBonus(user.address).call() / 1e18);
+    let dataFull = (await stakeContract.methods.getUserReferralTotalBonus(user.address).call() / 1e18);
 	let data = abrNum(dataFull, 4)
     $("#getUserReferralTotalBonus").text(data+" "+"SQUAD");
   })
@@ -218,7 +218,7 @@ async function contractBalances(){
 	let contractBalanceFull = (await web3.eth.getBalance(tokenAddress) / 1e18)
 	let contractBalance = abrNum(contractBalanceFull, 4)
 	$('#balanceContract').text(contractBalance)
-	let totalStakedFull = (await mainContract.methods.totalStaked().call() / 1e18)
+	let totalStakedFull = (await stakeContract.methods.totalStaked().call() / 1e18)
 	let totalStaked = abrNum(totalStakedFull, 4)
 	$('#totalStaked').text(totalStaked)
 }
@@ -232,10 +232,10 @@ async function planPercents() {
 			depositAmount: 0,
 			total: 0
 		}
-		let percent = await mainContract.methods.getPercent(i).call()
+		let percent = await stakeContract.methods.getPercent(i).call()
 		$('#plan'+(i+1)+'Percent')[0].innerHTML = parseFloat(percent/10)+ "%";
 		plans[i].percent = percent/10;
-		let c = await mainContract.methods.getPlanInfo(i).call()                   
+		let c = await stakeContract.methods.getPlanInfo(i).call()                   
 		plans[i].totalPercent = $('#plan'+(i+1)+'TPercent')[0].innerHTML = (c.time * plans[i].percent).toFixed(2);
 		plans[i].day = $('#plan'+(i+1)+'Day')[0].innerHTML = c.time;
 		

@@ -14,10 +14,10 @@ async function getTokenCounts(){
 	
 	circulatingTokens = await tokenContract.methods.totalSupply().call() / 1e18
 	
-	tokenBuyPrice = await tokenContract.methods.buyPrice().call()
-	tokenSellPrice = await tokenContract.methods.sellPrice().call()
+	tokenBuyPrice = await tokenContract.methods.calculateTokensReceived(toHexString(1e18)).call() / 1e18
+	tokenSellPrice = await tokenContract.methods.calculateEthereumReceived(toHexString(1e18)).call() / 1e18
 	
-	$('.token-buy-price')[0].innerHTML = "1 BNB = " + abrNum(tokenBuyPrice/1e18, 4) +" SQUAD"
+	$('.token-buy-price')[0].innerHTML = "1 BNB = " + abrNum(tokenBuyPrice, 4) +" SQUAD"
 	// if(circulatingTokens > 0)
 	// 	$('.token-sell-price')[0].innerHTML = abrNum(tokenSellPrice/1e18, 4) +" SqdUp Tokens : 1 BNB"
 	// else
@@ -43,21 +43,22 @@ async function buyToken(){
 		value: amount,
 		gasLimit:210000
 	}).then(res => {
+		console.log(res)
 		getTokenCounts()
-		alert("Bought " + res.events.Transfer.returnValues.value/1e18 +' tokens\n for '+amount/1e18+ ' BNB')
+		alert("Bought " + res.events.Transfer.returnValues.tokens/1e18 +' tokens\n for '+amount/1e18+ ' BNB')
 		console.log(res)
 	})
 }
 async function getBuyOutput(){
 	let amount = $('.buy-token-input')[0].value
-	let tokens = abrNum( await tokenContract.methods.buyPrice().call() / 1e18, 2)
-	$('.buy-button-text')[0].innerHTML = 'Buy ' + (amount*tokens) + ' Tokens<br> for '+ amount +' BNB'
+	let tokens = abrNum( await tokenContract.methods.calculateTokensReceived(toHexString(amount*1e18)).call() / 1e18, 2)
+	$('.buy-button-text')[0].innerHTML = 'Buy ' + (tokens) + ' Tokens<br> for '+ amount +' BNB'
 }
 let bnbPurchased
 async function getSellOutput(){
 	let amount = $('.sell-token-input')[0].value
-	bnbPurchased = abrNum( (await tokenContract.methods.sellPrice().call() / 1e18) * .9, 2)
-	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ (amount*bnbPurchased) +' BNB'
+	bnbPurchased = abrNum( (await tokenContract.methods.calculateEthereumReceived(toHexString(amount*1e18)).call() / 1e18), 2)
+	$('.sell-button-text')[0].innerHTML = 'Sell ' + amount + ' Tokens<br> for '+ (bnbPurchased) +' BNB'
 }
 async function sellToken(){
 	let bnb = bnbPurchased
@@ -66,13 +67,14 @@ async function sellToken(){
 		from: user.address,
 		gasLimit:210000
 	}).then(res => {
+		console.log(res)
 		getTokenCounts()
-		alert("Sold: " + res.events.Transfer.returnValues.value/1e18 +' tokens for '+bnb+ ' BNB')
+		alert("Sold " + res.events.Transfer.returnValues.tokens/1e18 +' tokens for '+bnb+ ' BNB')
 		console.log(res)
 	})
 }
 async function getRefCount(){
-	let refCount = await mainContract.methods.getUserDownlineCount(user.address).call()
+	let refCount = await stakeContract.methods.getUserDownlineCount(user.address).call()
 	$('.ref-count')[0].innerHTML = "Level 1: " + refCount[0]
 	$('.ref-count')[1].innerHTML = "Level 2: " + refCount[1]
 	$('.ref-count')[2].innerHTML = "Level 3: " + refCount[2]
