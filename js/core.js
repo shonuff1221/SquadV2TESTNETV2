@@ -10,7 +10,7 @@ let Accounttype = "0";
 const tokenAddress = "0xCB7594C252642C0c7B21E416D0ACBe3a548Cf5B1";
 let tokenContract = undefined
 
-const stakeContractAddress = "0xD06dd2d9CAA791905963D608b4E4EA751C95fd1b";
+const stakeContractAddress = "0x991D761D5b2BEe3432CA02Dd0f9b4c8377E4C9fb";
 let stakeContract = undefined
 
 const zeroAddress = "0x70DAcfC172eeC57553de491E92d9806e28ff69F2"
