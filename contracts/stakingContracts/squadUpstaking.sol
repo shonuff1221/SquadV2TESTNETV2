@@ -202,6 +202,9 @@ contract SQUAD_UP is Percentage{
 	function getUserCheckpoint(address userAddress) public view returns(uint256) {
 		return users[userAddress].checkpoint;
 	}
+	function getUserWithdrawTime(address userAddress) public view returns(uint256) {
+          return users[userAddress].lastWithdrawTime;
+}
 
 	function getUserReferrer(address userAddress) public view returns(address) {
 		return users[userAddress].referrer;
