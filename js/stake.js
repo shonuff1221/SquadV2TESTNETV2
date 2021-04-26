@@ -80,7 +80,7 @@ async function getTotalNumberOfDeposits() {
 }
 async function getUserWithdrawTime() {
     lastWithdrawTime = await stakeContract.methods.getUserWithdrawTime(user.address).call();
-	nextWithdraw = parseInt(lastWithdrawTime) + 60;
+	nextWithdraw = parseInt(lastWithdrawTime) + 86400;
 	getWithdrawTimer();
 	//console.log("withdraw time",lastWithdrawTime);
 }
