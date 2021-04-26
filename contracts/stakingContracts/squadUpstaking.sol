@@ -128,7 +128,7 @@ contract SQUAD_UP is Percentage{
 	}
 
 	function withdraw() public {
-	    require(now>=users[msg.sender].lastDepositTime+1 minutes,"You can't withdraw before a day");
+	    require(now>=users[msg.sender].lastDepositTime+1 days,"You can't withdraw before a day");
 		User storage user = users[msg.sender];
 
 		uint256 totalAmount = getUserDividends(msg.sender);
