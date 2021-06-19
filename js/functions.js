@@ -12,7 +12,7 @@ const networkURL = 'https://data-seed-prebsc-1-s2.binance.org:8545' //TestNet
 
 //Farm, swap, and Tokens
 //const priceFeedAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-const farmAddress = '0xA0510d09365373d623Ff7a8CA5587d8fd61fb23A'
+const farmAddress = '0xe6Baa2D254EF5a47bA7d4c75287ABA5A12E3d0AB'
 const wbnb = '0xae13d989dac2f0debff460ac112a837c89baa7cd'
 const busd = '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7'
 const pancakeAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"
