@@ -12,16 +12,16 @@ const networkURL = 'https://data-seed-prebsc-1-s2.binance.org:8545' //TestNet
 
 //Farm, swap, and Tokens
 //const priceFeedAddress = "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE";
-const farmAddress = '0xe6Baa2D254EF5a47bA7d4c75287ABA5A12E3d0AB'
+const farmAddress = '0x55495D490909AbB2Eb750463ac328c402d953736'
 const wbnb = '0xae13d989dac2f0debff460ac112a837c89baa7cd'
 const busd = '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7'
 const pancakeAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"
 
-const sqd = '0xB2Ac090A871616380FCf2B08228b99C43DCE8De5' // testnet
+const sqd = '0x263A77B7F5dF4B4cf19Aaf1C52cC5f46264D4317' // testnet
 
 //Pools
-const sqdBnbAddress = '0xa6f9997a65f950afbca5832029711b25e3c4a0ac' //testnet
-const sqdBusdAddress = '0x6509440da645ff67f4c5f71175418d6bf065914b' //testnet
+const sqdBnbAddress = '0xc63fdb4405ce628959caa004b4ca0b7054b39ee1' //testnet
+const sqdBusdAddress = '0xca35d3dcc2f108ce8837716141c4b686d9a6ee72' //testnet
 
 var farm = {
 	farmableSqd: 0,
@@ -47,7 +47,8 @@ var user = {
 	sqd: 0,
 	harvestable: 0,
 	depositAmount: undefined,
-	totalStakedValue: 0
+	totalStakedValue: 0,
+	lastWithdrawTime: undefined,
 }
 
 let farmContract = undefined
